@@ -81,7 +81,7 @@ at the top of any .cs files that you wish to protect.  It usually goes in Startu
 
 **12.** Note the `QueueFairConfig.AdapterMode` setting.  "safe" is recommended - we also support "simple" - see the Technical Guide for further details.
 
-**13.** **IMPORTANT** Note the `QueueFairConfig.debug` setting - this is set to true by default, BUT you MUST set debug to false on production machines/live queues as otherwise your web logs will rapidly become full.  You can also safely set 'QueueFairConfig.DebugIPAddress' to a single IP address to just output debug information for a single visitor, even on a production machine.
+**13.** **IMPORTANT** Note the `QueueFairConfig.debug` setting - this is set to true by default, BUT you MUST set debug to false on production machines/live queues as otherwise your web logs will rapidly become full.  You can also safely set `QueueFairConfig.DebugIPAddress` to a single IP address to just output debug information for a single visitor, even on a production machine.
 
 The debug logging statements will appear in your .NET debug console (when using Visual Studio Code) and Event Viewer -> Windows Logs -> Application.  The default loglevel is Warning to make them easy to see, but you can change this by editing QueueFairLogger.cs, which you can also change to use a different logging framework if you wish.
 
