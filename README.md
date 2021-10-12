@@ -49,7 +49,9 @@ Here's every keystroke for the install.
 
 **2.** To create the out-of-the-box .NET Hello World webapp, do
 
+```
   dotnet new webApp -o QueueFairDemo --no-https
+```
 
 **3.** In File Explorer, copy the Startup.cs file from this distribution into the new QueueFairDemo folder that has been created, overwriting the one that's already there.
 
