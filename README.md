@@ -71,7 +71,7 @@ at the top of any .cs files that you wish to protect.  It usually goes in Startu
 
 **7.** The Adapter uses the Newtonsoft.JSON package for parsing JSON.  To add this, you need the NuGet Package Manager extension.  Find the icon in the left nav of Visual Studio Code that looks like four squares.  Tap it to open Extensions.  Start typing NuGet.  When you see NuGet Package Manager, install it.
 
-**8.** To use NuGet Package Manager to install Newtonsoft.JSON, type CTRL-SHIFT-P to open the Command Pallette.  Start typing 'NuGet'.  Select NuGet Packet Manager : Add Package.  Type Newtonsoft.  Select Newtonsoft.JSON.  Select the most recent version.  If a button pops up saying "Restore", press it.
+**8.** To use NuGet Package Manager to install Newtonsoft.JSON, type CTRL-SHIFT-P to open the Command Palette.  Start typing 'NuGet'.  Select NuGet Packet Manager : Add Package.  Type Newtonsoft.  Select Newtonsoft.JSON.  Select the most recent version.  If a button pops up saying "Restore", press it.
 
 **9.** **IMPORTANT:** Make sure the system clock on your webserver is accurately set to network time! On unix systems, this is usually done with the ntp package.  It doesn't matter which timezone you are using. On Windows 10, it's under Settings -> Date & Time - make sure Set the time automatically is On.  On Windows Server, this procedure may vary.
 
