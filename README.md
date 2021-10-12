@@ -43,7 +43,9 @@ Here's every keystroke for the install.
 
 **1.** Open a command prompt or terminal.  Go to the directory in which you want the Hello World webapp to live.
 
+```
   cd \path\to\webapps
+```
 
 **2.** To create the out-of-the-box .NET Hello World webapp, do
 
@@ -59,7 +61,9 @@ Here's every keystroke for the install.
 
 **6.** Add
 
+```
   using QueueFair.Adapter
+```
   
 at the top of any .cs files that you wish to protect.  It usually goes in Startup.cs, as then the Adapter can run on any of your pages that match your queue's Activation Rules.
 
