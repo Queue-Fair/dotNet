@@ -59,7 +59,7 @@ Here's every keystroke for the install.
 
 ### Adding Queue-Fair to an existing Webapp ###
 
-**5.** Copy the QueueFairAdapter/QueueFair from this distribution into the top level folder of your webapp (QueueFairDemo if you are using the Hello World app).
+**5.** Copy the QueueFairAdapter/QueueFair folder from this distribution into the top level folder of your webapp (QueueFairDemo if you are using the Hello World app).
 
 **6.** Add
 
