@@ -10,8 +10,6 @@
 // in the root folder of your dotnet project.
 namespace QueueFair.Adapter
 {
-    using Microsoft.Extensions.Logging;
-
     public class QueueFairConfig
     {
         // Your Account Secret is shown on the Your Account page of
