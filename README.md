@@ -83,7 +83,7 @@ at the top of any .cs files that you wish to protect.  It usually goes in Startu
 
 **13.** **IMPORTANT** Note the `QueueFairConfig.debug` setting - this is set to true by default, BUT you MUST set debug to false on production machines/live queues as otherwise your web logs will rapidly become full.  You can also safely set `QueueFairConfig.DebugIPAddress` to a single IP address to just output debug information for a single visitor, even on a production machine.
 
-The debug logging statements will appear in your .NET debug console (when using Visual Studio Code) and Event Viewer -> Windows Logs -> Application.  The default loglevel is Warning to make them easy to see, but you can change this by editing QueueFairLogger.cs, which you can also change to use a different logging framework if you wish.
+The debug logging statements will appear in your .NET debug console (when using Visual Studio Code) and Event Viewer -> Windows Logs -> Application.  The default loglevel is Warning to make them easy to see, but you can change this by editing QueueFairCoreService.cs, which you can also change to use a different logging framework if you wish.
 
 That's it you're done!  Build and run your Webapp.
 
@@ -133,6 +133,6 @@ In many cases it is better to use the Client-Side Javascript Adapter to send and
 
 ## AND FINALLY
 
-All client-modifiable settings are in `QueueFairConfig.cs` .  You should never find you need to modify the other files except QueueFairLogger.cs if you are using an alternative logging framework - but if something comes up, please contact support@queue-fair.com right away so we can discuss your requirements.
+All client-modifiable settings are in `QueueFairConfig.cs` .  You should never find you need to modify the other files except QueueFairCoreService.cs if you wish to use an alternative logging framework.  If you are using .NET Framework rather than .NET Core, or are using some other HTTP framework, you can easily create your own implementation of IQueueFairService - see QueueFairCoreService.cs to find out what they need to do; it's only a few basic low-level methods and shouldn't take you very long. If something comes up, please contact support@queue-fair.com right away so we can discuss your requirements.
 
 Remember we are here to help you! The integration process shouldn't take you more than an hour - so if you are scratching your head, ask us.  Many answers are contained in the Technical Guide too.  We're always happy to help!
