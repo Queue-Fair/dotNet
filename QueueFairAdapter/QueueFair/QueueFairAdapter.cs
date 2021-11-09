@@ -14,9 +14,6 @@ namespace QueueFair.Adapter
     using System.Text;
     using System.Text.RegularExpressions;
     using System.Threading;
-    using System.Web;
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.Extensions.Primitives;
     using Newtonsoft.Json;
 
     public class QueueFairAdapter
@@ -31,8 +28,7 @@ namespace QueueFair.Adapter
         private string uid = null;
         private bool d = true;
         private bool addedCacheControlHeader = false;
-
-        public QueueFairAdapter(HttpContext context, QueueFairLogger logger)
+        public QueueFairAdapter(IQueueFairService service)
         {
             this.d = QueueFairConfig.Debug;
             if (!this.d && QueueFairConfig.DebugIPAddress != null)
@@ -40,35 +36,24 @@ namespace QueueFair.Adapter
                 this.d = true;
             }
 
-            this.Context = context;
-            this.Logger = logger;
+            this.Service = service;
         }
 
         public static string Protocol { get; set; } = "https";
 
         // Input - must be set before running:
         public string RequestedURL { get; set; } = null;
-
-        public Microsoft.AspNetCore.Http.IQueryCollection Query { get; set; } = null;
-
         public string RemoteIP { get; set; } = null;
 
         public string UserAgent { get; set; } = null;
-
-        public Microsoft.AspNetCore.Http.IRequestCookieCollection Cookies { get; set; } = null;
-
         public bool IsSecure { get; set; } = false;
-
         public string Extra { get; set; } = null;
-
         // variables
-        public QueueFairLogger Logger { get; set; } = null;
-
         public string Config { get; set; } = null;
 
         public QueueFairSettings Settings { get; set; } = null;
 
-        public HttpContext Context { get; set; } = null;
+        public IQueueFairService Service { get; set; } = null;
 
         public void SetuidFromCookie()
         {
@@ -96,26 +81,11 @@ namespace QueueFair.Adapter
 
         public string GetCookie(string cname)
         {
-            if (cname == null || cname == string.Empty)
-            {
-                return string.Empty;
-            }
-
-            if (this.Cookies == null)
-            {
-                return string.Empty;
-            }
-
-            string cookie = this.Cookies[cname];
+            string cookie = this.Service.GetCookie(cname);
 
             if (this.d)
             {
                 this.Log("GetCookie: Cookie is " + cookie);
-            }
-
-            if (cookie == null)
-            {
-                return string.Empty;
             }
 
             return cookie;
@@ -128,7 +98,7 @@ namespace QueueFair.Adapter
                 return;
             }
 
-            this.Context.Response.Headers.Add("Cache-Control", "no-store,max-age=0");
+            this.Service.AddHeader("Cache-Control", "no-store,max-age=0");
             this.addedCacheControlHeader = true;
         }
 
@@ -321,7 +291,7 @@ namespace QueueFair.Adapter
             if (adapterMode == "safe")
             {
                 string url = Protocol + "://" + queue.AdapterServer + "/adapter/" + queue.Name;
-                url += "?ipaddress=" + HttpUtility.UrlEncode(this.RemoteIP, Encoding.UTF8);
+                url += "?ipaddress=" + this.Service.Encode(this.RemoteIP);
                 if (this.uid != null)
                 {
                     url += "&uid=" + this.uid;
@@ -359,7 +329,7 @@ namespace QueueFair.Adapter
             }
             else
             {
-                string url = Protocol + "://" + queue.QueueServer + "/" + queue.Name + "?target=" + HttpUtility.UrlEncode(this.GetURL(), Encoding.UTF8);
+                string url = Protocol + "://" + queue.QueueServer + "/" + queue.Name + "?target=" + this.Service.Encode(this.GetURL());
 
                 url = this.AppendVariantToRedirectLocation(queue, url);
                 url = this.AppendExtraToRedirectLocation(queue, url);
@@ -479,7 +449,7 @@ namespace QueueFair.Adapter
                     }
 
                     queryParams += "target=";
-                    queryParams += HttpUtility.UrlEncode(target, Encoding.UTF8);
+                    queryParams += this.Service.Encode(target);
                 }
 
                 if (this.uid != null)
@@ -513,10 +483,9 @@ namespace QueueFair.Adapter
             // SafeGuard etc
             this.SetCookie(
                 Convert.ToString(this.adapterResult.queue),
-                HttpUtility.UrlDecode(Convert.ToString(this.adapterResult.validation), Encoding.UTF8),
+                this.Service.Decode(Convert.ToString(this.adapterResult.validation)),
                 this.adapterQueue.PassedLifetimeMinutes * 60,
-                this.adapterQueue.CookieDomain);
-
+                Convert.ToString(this.adapterQueue.CookieDomain));
             if (!this.continuePage)
             {
                 return;
@@ -779,7 +748,7 @@ namespace QueueFair.Adapter
                             break;
                         }
                     }
-                    else if (rule.Operator == "Or" && state)
+                    else if (rule.Operator == "Or")
                     {
                         state = state || ruleMatch;
                         if (state)
@@ -922,21 +891,7 @@ namespace QueueFair.Adapter
 
         public string GetQueryParameter(string name)
         {
-            if (this.Query == null)
-            {
-                return null;
-            }
-
-            StringValues parameterValues;
-            bool success = this.Query.TryGetValue(name, out parameterValues);
-
-            if (!success)
-            {
-                return null;
-            }
-
-            string[] resArr = parameterValues.ToArray();
-            return resArr[resArr.Length - 1];
+            return this.Service.GetQueryParameter(name);
         }
 
         public bool IsNumeric(string input)
@@ -947,7 +902,7 @@ namespace QueueFair.Adapter
 
         public long Time()
         {
-            return new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds();
+            return this.Service.UnixTimeSeconds();
         }
 
         public string CreateHash(string secret, string message)
@@ -1118,14 +1073,18 @@ namespace QueueFair.Adapter
             return param.Substring(0, i);
         }
 
-        public bool ValidateCookie(QueueFairSettings.Queue queue, string cookie)
+        public bool ValidateCookie(QueueFairSettings.Queue queue, string cookie) {
+            return ValidateCookie(queue.Secret, queue.PassedLifetimeMinutes, cookie);
+        }
+
+        public bool ValidateCookie(string secret, int passedLifetimeMinutes, string cookie)
         {
             if (this.d)
             {
                 this.Log("ValidateCookie Validating cookie " + cookie);
             }
 
-            if (queue == null)
+            if (secret == null)
             {
                 return false;
             }
@@ -1153,7 +1112,7 @@ namespace QueueFair.Adapter
 
                 string check = cookie.Substring(0, hpos);
 
-                string checkHash = this.CreateHash(queue.Secret, this.ProcessIdentifier(this.UserAgent) + check);
+                string checkHash = this.CreateHash(secret, this.ProcessIdentifier(this.UserAgent) + check);
 
                 if (hash != checkHash)
                 {
@@ -1211,7 +1170,7 @@ namespace QueueFair.Adapter
                     return false;
                 }
 
-                if (tsLong < this.Time() - (queue.PassedLifetimeMinutes * 60))
+                if (tsLong < this.Time() - (passedLifetimeMinutes * 60))
                 {
                     if (this.d)
                     {
@@ -1241,28 +1200,7 @@ namespace QueueFair.Adapter
 
         public void SetCookieRaw(string cookieName, string value, int lifetimeSeconds, string cookieDomain)
         {
-            CookieOptions cookieOptions = new CookieOptions
-            {
-                Expires = DateTimeOffset.Now.AddSeconds(lifetimeSeconds),
-                HttpOnly = false,
-            };
-
-            if (this.IsSecure)
-            {
-                cookieOptions.Secure = true;
-                cookieOptions.SameSite = SameSiteMode.None;
-            }
-            else
-            {
-                cookieOptions.Secure = false;
-            }
-
-            if (cookieDomain != null && cookieDomain != string.Empty)
-            {
-                cookieOptions.Domain = cookieDomain;
-            }
-
-            this.Context.Response.Cookies.Append(cookieName, value, cookieOptions);
+            this.Service.SetCookie(cookieName,value,lifetimeSeconds,cookieDomain,this.IsSecure);
         }
 
         public void SetCookie(string queueName, string value, int lifetimeSeconds, string cookieDomain)
@@ -1310,7 +1248,7 @@ namespace QueueFair.Adapter
             this.continuePage = false;
 
             this.CheckAndAddCacheControl();
-            this.Context.Response.Redirect(loc);
+            this.Service.Redirect(loc);
         }
 
         public void MarkPassed(string name)
@@ -1382,7 +1320,7 @@ namespace QueueFair.Adapter
                 url += "&";
             }
 
-            url += "qfv=" + HttpUtility.UrlEncode(variant, Encoding.UTF8);
+            url += "qfv=" + this.Service.Encode(variant);
             return url;
         }
 
@@ -1407,7 +1345,7 @@ namespace QueueFair.Adapter
                 url += "&";
             }
 
-            url += "qfx=" + HttpUtility.UrlEncode(this.Extra, Encoding.UTF8);
+            url += "qfx=" + this.Service.Encode(this.Extra);
             return url;
         }
 
@@ -1446,7 +1384,7 @@ namespace QueueFair.Adapter
 
         public void Log(string message)
         {
-            if (this.Logger == null)
+            if (this.Service == null)
             {
                 return;
             }
@@ -1457,18 +1395,18 @@ namespace QueueFair.Adapter
             }
 
             if (QueueFairConfig.DebugIPAddress != null
-               && this.Context != null
+               && this.Service != null
                && this.RemoteIP != QueueFairConfig.DebugIPAddress)
             {
                 return;
             }
 
-            this.Logger.Log(message);
+            this.Service.Log(message);
         }
 
         public void Err(Exception exception)
         {
-            this.Logger.Err(exception);
+            this.Service.Err(exception);
         }
 
         private static uint[] CreateLookup32()
