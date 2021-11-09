@@ -61,7 +61,7 @@ namespace QueueFairDemo
                     ILogger l =
                     context.RequestServices.GetService<ILogger<EventSourceLoggerProvider>>();
 
-                    QueueFairLogger logger = new QueueFairLogger(l);
+                    QueueFairCoreService service = new QueueFairCoreService(l,context,context.Request.Query, context.Request.Cookies);
 
                     QueueFairConfig.AccountSecret = "REPLACE_WITH_YOUR_ACCOUNT_SECRET";
                     QueueFairConfig.Account = "REPLACE_WITH_YOUR_ACCOUNT_SYSTEM_NAME";
@@ -73,25 +73,23 @@ namespace QueueFairDemo
 		    // Set it to at least 5 for production.
 		    // QueueFairConfig.SettingsCacheLifetimeMinutes = 0
 
-                    QueueFairAdapter queueFairAdapter = new QueueFairAdapter(context, logger);
+		    QueueFairAdapter queueFairAdapter = new QueueFairAdapter(service);
 
                     queueFairAdapter.RequestedURL = context.Request.Scheme + "://" + context.Request.Host + context.Request.PathBase + context.Request.Path + context.Request.QueryString;
                     queueFairAdapter.IsSecure = context.Request.IsHttps;
-                    queueFairAdapter.Query = context.Request.Query;
                     queueFairAdapter.RemoteIP = Convert.ToString(context.Connection.RemoteIpAddress);
                     queueFairAdapter.UserAgent = context.Request.Headers["User-Agent"];
-                    queueFairAdapter.Cookies = context.Request.Cookies;
 
                     /* If you JUST want to validate a PassedCookie, use this on a path that does NOT match any queue's Activation Rules: */
                     /*
-                    if (queueFairAdapter.RequestedURL.IndexOf("some/path") != -1)
+                    if (queueFairAdapter.RequestedURL.IndexOf("/path/to/page") != -1)
                     {
                         try
                         {
-                            queueFairAdapter.Settings = QueueFairConfig.SettingsSource.GetSettings(queueFairAdapter);
-                            if (!queueFairAdapter.ValidateCookie(queueFairAdapter.Settings.GetQueueByName("queueName"), queueFairAdapter.Cookies["Queue-Fair-Pass-queue_name"]))
+                            int passedLifetimeMinutes = 60; //Passed cookie valid for one hour.
+                            if (!queueFairAdapter.ValidateCookie("QUEUE SECRET FROM PORTAL", passedLifetimeMinutes, service.GetCookie("Queue-Fair-Pass-queue_name")))
                             {
-                                queueFairAdapter.Redirect("https://client_name.queue-fair.net/queue_name?qfError=InvalidCookie", 0);
+                                queueFairAdapter.Redirect("https://YOUR_ACCOUNT_SYSTEM_NAME.queue-fair.net/YOUR_QUEUE_SYSTEM_NAME?qfError=InvalidCookie", 0);
                             }
                             else
                             {
