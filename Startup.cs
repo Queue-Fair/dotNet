@@ -87,7 +87,7 @@ namespace QueueFairDemo
                         try
                         {
                             int passedLifetimeMinutes = 60; //Passed cookie valid for one hour.
-                            if (!queueFairAdapter.ValidateCookie("QUEUE SECRET FROM PORTAL", passedLifetimeMinutes, service.GetCookie("QueueFair-Pass-QUEUE_NAME_FROM_PORTAL")))
+                            if (!queueFairAdapter.ValidateCookie("QUEUE SECRET FROM PORTAL", passedLifetimeMinutes, service.GetCookie("QueueFair-Pass-QUEUE_SYSTEM_NAME_FROM_PORTAL")))
                             {
                                 queueFairAdapter.Redirect("https://YOUR_ACCOUNT_SYSTEM_NAME.queue-fair.net/YOUR_QUEUE_SYSTEM_NAME?qfError=InvalidCookie", 0);
                             }
