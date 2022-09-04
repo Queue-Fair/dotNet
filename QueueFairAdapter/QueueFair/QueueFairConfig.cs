@@ -52,6 +52,8 @@ namespace QueueFair.Adapter
 
         // Wheether to send the visitor to the Adapter server for counting (simple mode),
         // or consult the Adapter server (safe mode).  The recommended value is "safe".
+        // If you change this to "simple", consider setting StripPassedString above to
+        // false to make it easier for Google to crawl your pages.
         public static string AdapterMode { get; set; } = "safe";
 
         // On dotNet, a single copy of your Queue-Fair settings is cached in memory.
