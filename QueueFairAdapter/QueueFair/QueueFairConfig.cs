@@ -25,7 +25,7 @@ namespace QueueFair.Adapter
 
         // Time limit for Passed Strings to be considered valid,
         // before and after the current time.  Make sure your system clock is accurately set!
-        public static int QueryTimeLimitSeconds { get; set; } = 30;
+        public static int QueryTimeLimitSeconds { get; set; } = 300;
 
         // Whether or not to produce logging messages.
         public static bool Debug { get; set; } = false;
