@@ -124,7 +124,7 @@ The Server-Side Adapter contains multiple checks to prevent visitors bypassing t
 
  - The Server-Side Adapter checks that Passed Cookies and Passed Strings presented by web browsers have been signed by our Queue-Server.  It uses the Secret visible on each queue's Settings page to do this.
  - If you change the queue Secret, this will invalidate everyone's cookies and also cause anyone in the queue to lose their place, so modify with care!
- - The Server-Side Adapter also checks that Passed Strings coming from our Queue Server to your web server were produced within the last 30 seconds, which is why your clock must be accurately set.
+ - The Server-Side Adapter also checks that Passed Strings coming from our Queue Server to your web server were produced within the last 300 seconds, which is why your clock must be accurately set.
  -  The Server-Side Adapter also checks that passed cookies were produced within the time limit set by Passed Lifetime on the queue Settings page, to prevent visitors trying to cheat by tampering with cookie expiration times or sharing cookie values.  So, the Passed Lifetime should be set to long enough for your visitors to complete their transaction, plus an allowance for those visitors that are slow, but no longer.
  - The signature also includes the visitor's USER_AGENT, to further prevent visitors from sharing cookie values.
 
