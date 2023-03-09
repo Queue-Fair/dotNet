@@ -138,6 +138,6 @@ If you are using .NET Framework instead of Core, then delete the QueueFairCoreSe
 
 ## AND FINALLY
 
-All client-modifiable settings are in `QueueFairConfig.cs` .  You should never find you need to modify the other files except `QueueFairCoreService.cs` if you wish to use an alternative logging framework.  If you are using some other HTTP framework, you can easily create your own implementation of IQueueFairService - see QueueFairCoreService.cs to find out what they need to do; it's only a few basic low-level methods. If something comes up, please contact support@queue-fair.com right away so we can discuss your requirements.
+All client-modifiable settings are in `QueueFairConfig.cs` .  You should never find you need to modify the other files except `QueueFairCoreService.cs` if you wish to use an alternative logging framework.  If you are using some other HTTP framework, you can easily create your own implementation of IQueueFairService - see QueueFairCoreService.cs to find out what the implemented methods must do; it's only a few basic low-level methods. If something comes up, please contact support@queue-fair.com right away so we can discuss your requirements.
 
 Remember we are here to help you! The integration process shouldn't take you more than an hour - so if you are scratching your head, ask us.  Many answers are contained in the Technical Guide too.  We're always happy to help!
