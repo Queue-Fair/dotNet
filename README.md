@@ -33,9 +33,11 @@ If a visitor requests a page that DOES match any queue's Activation Rules, the A
 
 Thus the Server-Side Adapter prevents visitors from skipping the queue by disabling the Client-Side JavaScript Adapter, and also reduces load on your web server when things get busy.
 
-This guide assumes you already have a functional .NET or ASP systemm, that you have dotnet installed, and are using Visual Studio Code  If you are creating a .NET or ASP application for the first time, see https://dotnet.microsoft.com/learn/aspnet/hello-world-tutorial/intro
+This guide assumes you already have a functional .NET or ASP system, that you have dotnet installed, and are using Visual Studio Code  If you are creating a .NET or ASP application for the first time, see https://dotnet.microsoft.com/learn/aspnet/hello-world-tutorial/intro
 
-Example code for integrating with Queue-Fair can be found in the Startup.cs file that is part of this distribution.  We'll walk you through creating a "Hello World" dotnet webapp, and then the process of adding Queue-Fair to your webapp.
+Example code for integrating with Queue-Fair with .NET Core can be found in the Startup.cs file that is part of this distribution.  If you are using .NET Framework instead of Core, see the note at the end of this README.  
+
+We'll walk you through creating a "Hello World" dotnet Core webapp, and then the process of adding Queue-Fair to your webapp.
 
 Here's every keystroke for the install.
 
@@ -47,7 +49,7 @@ Here's every keystroke for the install.
   cd \path\to\webapps
 ```
 
-**2.** To create the out-of-the-box .NET Hello World webapp, do
+**2.** To create the out-of-the-box .NET Core Hello World webapp, do
 
 ```
   dotnet new webApp -o QueueFairDemo --no-https
@@ -130,6 +132,9 @@ The Server-Side Adapter contains multiple checks to prevent visitors bypassing t
 
 ## Validating Cookies (Hybrid Security Model)
 In many cases it is better to use the Client-Side Javascript Adapter to send and receive people to and from the queue - the reasons for this are covered in the Technical Guide.  If your aim with the Server Side adapter is merely to prevent the very small percentage of people who attempt to cheat the queue from ordering, you can leave the Client-Side Javascript Adapter in place and use the ValidateCookie method of the Adapter instead. Example code is also included in the `Startup.cs` file included in this distribution.
+
+## .NET Framework (not Core)
+If you are using .NET Framework instead of Core, then delete the QueueFairCoreService.cs file from the QueueFair folder and replace it with QueueFairFrameworkService.cs from the "framework" folder of this distribution.  There is example code for using the Adapter with .NET Framework in the HomeController.cs in the "framework" folder of this distribution.
 
 ## AND FINALLY
 
