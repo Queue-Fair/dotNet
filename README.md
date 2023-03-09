@@ -12,7 +12,7 @@ To add the Queue-Fair Client-Side JavaScript Adapter to your web server, you don
 Instead, add the following tag to the `<head>` section of your pages:
  
 ```
-<script data-queue-fair-client="CLIENT_NAME" src="https://files.queue-fair.net/queue-fair-adapter.js"></script>`
+<script data-queue-fair-client="CLIENT_NAME" src="https://files.queue-fair.net/queue-fair-adapter.js"></script>
 ```
 
 Replace CLIENT_NAME with the account system name visibile on the Account -> Your Account page of the Queue-Fair Portal
