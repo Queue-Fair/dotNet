@@ -79,7 +79,7 @@ namespace QueueFair.Adapter
 
         public void Redirect(string loc)
         {
-            this.context.Response.Redirect(loc);
+            this.context.Response.Redirect(loc, false);
         }
 
         public string GetCookie(string cname)
