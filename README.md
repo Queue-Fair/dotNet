@@ -1,5 +1,5 @@
 ---
-## Queue-Fair ASP / .NET / C# Adapter README & Installation Guide
+## Queue-Fair ASP / .NET / C# Adapter README & Installation Guide - Core and Framework
 
 Queue-Fair can be added to any web server easily in minutes.  You will need a Queue-Fair account - please visit https://queue-fair.com/free-trial if you don't already have one.  You should also have received our Technical Guide.  Find out all about Queue-Fair at https://queue-fair.com
 
