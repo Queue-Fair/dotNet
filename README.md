@@ -134,7 +134,7 @@ The Server-Side Adapter contains multiple checks to prevent visitors bypassing t
 In many cases it is better to use the Client-Side Javascript Adapter to send and receive people to and from the queue - the reasons for this are covered in the Technical Guide.  If your aim with the Server Side adapter is merely to prevent the very small percentage of people who attempt to cheat the queue from ordering, you can leave the Client-Side Javascript Adapter in place and use the ValidateCookie method of the Adapter instead. Example code is also included in the `Startup.cs` file included in this distribution.
 
 ## .NET Framework (not Core)
-If you are using .NET Framework instead of Core, then delete the QueueFairCoreService.cs file from the QueueFair folder and replace it with QueueFairFrameworkService.cs from the "framework" folder of this distribution.  There is example code for using the Adapter with .NET Framework in  HomeController.cs in the "framework" folder of this distribution.
+If you are using .NET Framework instead of Core, then delete the QueueFairCoreService.cs file from the QueueFair folder and replace it with QueueFairFrameworkService.cs from the "framework" folder of this distribution.  The recommended way of using QueueFair is by overriding Application_BeginRequest in your Global.asax.cs file - see the example code in the "framework" folder - as this will minimise processing by your servers of requests that need to be queued.  You can also call QueueFair in your MVC Controllers if you are using the MVC framework - see the example code in the HomeController.cs file in the "framework" folder of this distribution.
 
 ## AND FINALLY
 
