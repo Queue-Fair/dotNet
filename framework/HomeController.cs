@@ -10,6 +10,7 @@ namespace DotNetFramework.Controllers
         
         private bool goQueueFair()
         {
+            //The following values mut be replaced with the values shown on the Account -> Your Account page in the Portal.
             QueueFairConfig.AccountSecret = "REPLACE_WITH_YOUR_ACCOUNT_SECRET";
             QueueFairConfig.Account = "REPLACE_WITH_YOUR_ACCOUNT_SYSTEM_NAME";
 
