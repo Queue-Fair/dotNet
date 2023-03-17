@@ -95,6 +95,8 @@ In the case where the Adapter sends the request elsewhere (for example to show t
 
 **IMPORTANT:** If the Adapter needs to add a cookie or send a Location: header, these responses MUST NOT be cached.  The Adapter will add a suitable Cache-Control header if it does this.  You must ensure it is not overridden by any other Cache-Control header produced by your framework.  The one from the Adapter should be the only one present in the HTTP responses you can see in your browser's Inspector.
 
+**IMPORTANT** Unlike the JavaScript Client-Side Adapter, which only runs in browsers that run JavaScript and only on browsers requesting page URLs that contain the Adapter tag, the Server-Side Adapter may run on every request. That means if you have automated systems that call API or callback URLs on your site (such as payment gateways), and your Activation Rules match those URLs, they will also be queued when things get busy, which can have adverse effects. We recommend that you exclude API or callback URLs from the Adapter in logic in your code - you can also use the Activation Rules to achieve this.
+
 ### To test the Server-Side Adapter
 
 Use a queue that is not in use on other pages, or create a new queue for testing.  Add an Activation Rule for Path Contains /.  Hit Make Live.
