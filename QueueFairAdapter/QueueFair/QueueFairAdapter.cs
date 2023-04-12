@@ -687,6 +687,17 @@ namespace QueueFair.Adapter
                     ret = true;
                 }
             }
+            else if (match == "RegExp")
+            {
+                if (comp == null || comp == string.Empty)
+                {
+                    ret = false;
+                }
+                else
+                {
+                    ret = Regex.IsMatch(comp, test);
+                }
+            }
 
             if (rule.Negate)
             {
