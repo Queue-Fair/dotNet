@@ -78,9 +78,13 @@ namespace QueueFairDemo
 		    QueueFairAdapter queueFairAdapter = new QueueFairAdapter(service);
 
                     queueFairAdapter.RequestedURL = context.Request.Scheme + "://" + context.Request.Host + context.Request.PathBase + context.Request.Path + context.Request.QueryString;
+		    queueFairAdapter.UserAgent = context.Request.Headers["User-Agent"];
+
+	            //IMPORTANT: If your server is behind a firewall/load balancer, you may need to edit these lines to reflect whether the end visitor connection is secure
+		    //and to give the end visitor's IP address, not the firewall/load balancer IP address.  The visitor's IP address is usually in an X-Forwarded-For header.
                     queueFairAdapter.IsSecure = context.Request.IsHttps;
                     queueFairAdapter.RemoteIP = Convert.ToString(context.Connection.RemoteIpAddress);
-                    queueFairAdapter.UserAgent = context.Request.Headers["User-Agent"];
+                    
 
                     /* If you JUST want to validate a PassedCookie, use this on a path that does NOT match any queue's Activation Rules: */
                     /*
