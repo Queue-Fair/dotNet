@@ -56,6 +56,12 @@ namespace QueueFair.Adapter
         // false to make it easier for Google to crawl your pages.
         public static string AdapterMode { get; set; } = "safe";
 
+        // When enabled the URL of any visitor request that results in an Adapter call to 
+        // the Queue Server cluster is sent to the cluster for logging, which is occasionally
+        // useful for investigations.  Only applies to SAFE mode.
+        // Should be set to false for production systems.
+        public static bool SendURL { get; set; } = false;
+
         // On dotNet, a single copy of your Queue-Fair settings is cached in memory.
         public static IQueueFairSettingsSource SettingsSource { get; set; } = new QueueFair.Adapter.RemoteSettingsSource();
     }
