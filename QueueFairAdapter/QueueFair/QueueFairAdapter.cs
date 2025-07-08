@@ -298,6 +298,12 @@ namespace QueueFair.Adapter
                 }
 
                 url += "&identifier=" + this.ProcessIdentifier(this.UserAgent);
+
+                if (QueueFairConfig.SendURL)
+                {
+                     url += "&url=" + this.Service.Encode(this.GetURL());
+                }
+                
                 if (this.d)
                 {
                     this.Log("ConsultAdapter Consulting adapter at " + url);
